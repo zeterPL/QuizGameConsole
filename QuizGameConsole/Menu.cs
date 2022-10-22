@@ -70,6 +70,9 @@ namespace QuizGameConsole
 
             if(points != null)
             {
+                string p = asciiSymbol.getPointsString((int)points);
+                Console.WriteLine(p);
+                /*
                 if(points == 0 ) Console.WriteLine(asciiSymbol.zero);
                 if (points == 1 ) Console.WriteLine(asciiSymbol.one);
                 if (points == 2 ) Console.WriteLine(asciiSymbol.two);
@@ -81,6 +84,7 @@ namespace QuizGameConsole
                 if (points == 8 ) Console.WriteLine(asciiSymbol.eight);
                 if (points == 9 ) Console.WriteLine(asciiSymbol.nine);
                 if (points == 10 ) Console.WriteLine(asciiSymbol.ten);
+                */
             }
             //Console.WriteLine(asciiSymbol.zero);
             //(int l, int r) = Console.GetCursorPosition();

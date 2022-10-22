@@ -146,5 +146,30 @@ namespace QuizGameConsole
                                               
 ";
 
+        public string score { get; set; } = @"
+██╗   ██╗ ██████╗ ██╗   ██╗██████╗ ██████╗     ███████╗ ██████╗ ██████╗ ██████╗ ███████╗    ██╗███████╗   
+╚██╗ ██╔╝██╔═══██╗██║   ██║██╔══██╗██╔══██╗    ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝    ██║██╔════╝██╗
+ ╚████╔╝ ██║   ██║██║   ██║██████╔╝██████╔╝    ███████╗██║     ██║   ██║██████╔╝█████╗      ██║███████╗╚═╝
+  ╚██╔╝  ██║   ██║██║   ██║██╔══██╗██╔══██╗    ╚════██║██║     ██║   ██║██╔══██╗██╔══╝      ██║╚════██║██╗
+   ██║   ╚██████╔╝╚██████╔╝██║  ██║██║  ██║    ███████║╚██████╗╚██████╔╝██║  ██║███████╗    ██║███████║╚═╝
+   ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝╚══════╝   
+                                                                                                          
+";
+
+        public string getPointsString(int points)
+        {
+            if (points == 0) return zero;
+            if (points == 1) return one;
+            if (points == 2) return two;
+            if (points == 3) return three;
+            if (points == 4) return four;
+            if (points == 5) return five;
+            if (points == 6) return six;
+            if (points == 7) return seven;
+            if (points == 8) return eight;
+            if (points == 9) return nine;
+            if (points == 10) return ten;
+            return "";
+        }
     }
 }

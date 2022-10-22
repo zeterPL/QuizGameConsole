@@ -144,6 +144,7 @@ namespace QuizGameConsole
                 {
                     Console.Clear();
                     Console.WriteLine(asciiSymbol.win);
+                    
                     points = 0;
                     Console.WriteLine("Wciśnij dowony przycisk aby kontunuować ...");
                     Console.ReadKey(true);
@@ -171,6 +172,16 @@ namespace QuizGameConsole
                 //Console.Clear(); ///
                 clearConsoleLines(0, 8);
             }
+            
+            Console.Clear();
+            Console.WriteLine(asciiSymbol.score);
+            string p = asciiSymbol.getPointsString(points);
+            Console.WriteLine(p);
+            points = 0;
+            Console.WriteLine("Wciśnij dowony przycisk aby kontunuować ...");
+            Console.ReadKey(true);
+            runMainMenu();
+
         }
 
         /// <summary>
