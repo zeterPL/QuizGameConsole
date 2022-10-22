@@ -1,0 +1,91 @@
+﻿15
+To jest pytanie 1?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+0
+To jest pytanie 2?
+A: Odpowiedź 1 2
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+1
+Ile masz lat?
+A: 12
+B: 100
+C: 21
+D: 45
+2
+To jest pytanie 4?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4 4
+3
+To jest pytanie 5?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4 5
+3
+To jest pytanie 6?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 7?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 8?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 9?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 10?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 11?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 12?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 13?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 14?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
+To jest pytanie 15?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
+3
