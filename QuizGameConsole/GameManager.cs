@@ -37,6 +37,19 @@ namespace QuizGameConsole
         /// </summary>
         public Question[] questions { get; set; }
 
+        /// <summary>
+        /// Lista użytkowników
+        /// </summary>
+        public User[] users { get; set; }
+
+        /// <summary>
+        /// Obecnie grający użytkownik
+        /// </summary>
+        public User currentUser { get; set; }
+
+        /// <summary>
+        /// Uzyskana punty
+        /// </summary>
         public int points { get; set; } = 8;
 
         /// <summary>
@@ -55,7 +68,8 @@ namespace QuizGameConsole
         private void runMainMenu()
         {
             string[] options = { "Start", "Opcje" ,"Gracz" ,"Wyjście" };
-            this.mainMenu = new Menu(options, title, "Witaj w grze! Wybierz Start aby rozpocząć.");
+            if(currentUser == null) this.mainMenu = new Menu(options, title, "Witaj w grze! Wybierz Start aby rozpocząć.");
+            else this.mainMenu = new Menu(options, currentUser, title, "Wybierz Start aby rozpocząć.");
 
             int selectedIndex = mainMenu.Run();
 
@@ -65,10 +79,10 @@ namespace QuizGameConsole
                     runFirstChoice();
                     break;
                 case 1:
-                    //displayoptions
+                    runOptionsMenu();
                     break;
                 case 2:
-                    //displayUser
+                    runUserMenu();
                     break;
                 case 3:
                     exitGame();
@@ -79,6 +93,108 @@ namespace QuizGameConsole
                   
         }
 
+        /// <summary>
+        /// Uruchamia menu opcji
+        /// </summary>
+        public void runOptionsMenu()
+        {
+            string[] options = 
+            {
+                "Kolory",
+                "Sterowanie",
+                "Muzyka",
+                "Wstecz",
+            };
+
+            Menu optionsMenu = new Menu(options, title, "Wybierz opcje z listy poniżej: ");
+            int selectedOption = optionsMenu.Run();
+
+        }
+
+        /// <summary>
+        /// Uruchamia menu użytkownika
+        /// </summary>
+        public void runUserMenu()
+        {
+            string[] options = { "Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
+            Menu userMenu = new Menu(options, title, "Wybierz opcje: ");
+            Console.Clear();
+            int selectedOption = userMenu.Run();
+
+            if(selectedOption == 0)
+            {
+                string[] usersNames = loadUsers();
+                showUsers(usersNames);
+            }
+            else if(selectedOption == 1)
+            {
+                addUser();
+            }
+            else if(selectedOption == 2)
+            {
+                runMainMenu();
+            }
+
+        }
+
+        public void addUser()
+        {
+            loadUsers(true);
+            string name;
+            Console.Clear();
+            Console.WriteLine(title); ;
+            Console.WriteLine("Podaj nazwę użytkownika: ");
+            Console.CursorVisible = true;
+            name = Console.ReadLine();
+            Console.CursorVisible = false;  
+            users[users.Length - 1] = new User(name);
+            currentUser = users[users.Length - 1];
+            saveUsers();
+            runMainMenu();
+        }
+
+        public void showUsers(string[] usersNames)
+        {
+            Menu usersMenu = new Menu(usersNames, title, "Wybierz użytkownika z listy");
+            int selectedItem = usersMenu.Run();
+
+            this.currentUser = users[selectedItem];
+
+            runMainMenu();
+
+        }
+
+        /// <summary>
+        /// Wczytanie użytkowników z pliku txt
+        /// </summary>
+        public string[] loadUsers(bool isNew = false)
+        {
+            string[] usersNames;
+            string workingDirectory = Environment.CurrentDirectory;
+            using (StreamReader usersFile = new StreamReader(Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\users.txt"))
+            {
+                int numberOfUsers = int.Parse(usersFile.ReadLine());
+
+                if(!isNew) users = new User[numberOfUsers];
+                else users = new User[numberOfUsers + 1];
+
+                usersNames = new string[numberOfUsers];
+
+                int index = 0;
+                int indexNames = 0;
+                while (!usersFile.EndOfStream)
+                {
+                    string name = usersFile.ReadLine();
+                    int maxScore = int.Parse(usersFile.ReadLine());
+                    string bestTime = usersFile.ReadLine();
+
+                    usersNames[indexNames++] = name;
+                    User u = new User(name ,bestTime ,maxScore);
+                    users[index++] = u;
+                }
+            }
+            return usersNames;
+        }
         /// <summary>
         /// Wychodzi z gry
         /// </summary>
@@ -93,6 +209,7 @@ namespace QuizGameConsole
         /// </summary>
         public void runFirstChoice()
         {
+            DateTime dateTime = DateTime.Now;
             Console.Clear();
             /* TEST 
             string[] options =
@@ -106,7 +223,7 @@ namespace QuizGameConsole
             questionsMenu.Run();
             */
             loadQuestions();
-            showQuestions();
+            showQuestions(dateTime);
 
         }
 
@@ -133,18 +250,78 @@ namespace QuizGameConsole
             
         }
 
+        private string printTime(int hours, int minutes, int seconds)
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            if (hours == 0)
+            {
+                if (minutes == 0)
+                {
+                    Console.WriteLine(seconds + " sec.");
+                    Console.ResetColor();
+                    return seconds + " sec.";
+                }
+                else
+                {
+                    Console.WriteLine(minutes + " min. " + seconds + " sec.");
+                    Console.ResetColor();
+                    return minutes + " min. " + seconds + " sec.";
+                }
+
+            }
+            else 
+            {
+                Console.WriteLine(hours + " hour " + minutes + " min." + seconds + " sec.");
+                Console.ResetColor();
+                return hours + " hour " + minutes + " min." + seconds + " sec.";
+            }
+        }
+
         /// <summary>
         /// Wyświetla pytania na ekran
         /// </summary>
-        public void showQuestions()
+        public void showQuestions(DateTime startTime)
         {
-            foreach(Question q in questions )
+            //DateTime startTime = DateTime.Now;
+            DateTime endTime;
+
+            bool[] flags = new bool[questions.Length];
+            Question q;
+            //dziesięć losowych pytań z bazy
+            for(int i=0; i< 10; i++)
             {
+                Random random = new Random();
+                int index = random.Next(questions.Length);
+                if (!flags[index])
+                {
+                    flags[index] = true;
+                    q = questions[index];
+                }
+                else
+                {
+                    i--;
+                    continue;
+                }
+                
+                //Question q = questions[index];
                 if(points == 10)
                 {
+                    endTime = DateTime.Now;
                     Console.Clear();
                     Console.WriteLine(asciiSymbol.win);
-                    
+                    TimeSpan dt = endTime - startTime;
+                    int seconds = dt.Seconds;
+                    int minutes = dt.Minutes;
+                    int hours = dt.Hours;
+                    string bestT = printTime(hours, minutes, seconds);
+                   // Console.WriteLine(minutes + "min. " + seconds + "sec.");
+                    if(currentUser != null && currentUser.maxScore < points)
+                    {
+                        currentUser.maxScore = points;
+                        currentUser.bestTime = bestT;
+                        saveUsers();
+                    }
                     points = 0;
                     Console.WriteLine("Wciśnij dowony przycisk aby kontunuować ...");
                     Console.ReadKey(true);
@@ -172,16 +349,48 @@ namespace QuizGameConsole
                 //Console.Clear(); ///
                 clearConsoleLines(0, 8);
             }
-            
+
+            endTime = DateTime.Now;
             Console.Clear();
             Console.WriteLine(asciiSymbol.score);
             string p = asciiSymbol.getPointsString(points);
             Console.WriteLine(p);
+            TimeSpan deltaTime = endTime - startTime;
+            int sec = deltaTime.Seconds;
+            int min = deltaTime.Minutes;
+            int h = deltaTime.Hours;
+            string bestTime = printTime(h, min, sec);
+            //Console.WriteLine(sec + "sec.");
+            //Console.WriteLine(endTime - startTime);
+            if (currentUser != null && currentUser.maxScore < points)
+            {
+                currentUser.maxScore = points;
+                currentUser.bestTime = bestTime;
+                saveUsers();
+            }
             points = 0;
             Console.WriteLine("Wciśnij dowony przycisk aby kontunuować ...");
             Console.ReadKey(true);
+            Console.Clear();
             runMainMenu();
 
+        }
+
+        public void saveUsers()
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string[] lines;
+            lines = new string[users.Length * 3 + 1];
+            lines[0] = users.Length.ToString();
+            int index = 0;
+            for(int i=1; i < lines.Length; i+=3)
+            {
+                lines[i] = users[index].Name;
+                lines[i+1] = users[index].maxScore.ToString();
+                lines[i+2] = users[index].bestTime.ToString();
+                index++;
+            }
+            File.WriteAllLines(Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\users.txt", lines);
         }
 
         /// <summary>

@@ -11,11 +11,11 @@ B: Odpowiedź 2
 C: Odpowiedź 3
 D: Odpowiedź 4
 1
-Ile masz lat?
-A: 12
-B: 100
-C: 21
-D: 45
+To jest pytanie 3?
+A: Odpowiedź 1
+B: Odpowiedź 2
+C: Odpowiedź 3
+D: Odpowiedź 4
 2
 To jest pytanie 4?
 A: Odpowiedź 1

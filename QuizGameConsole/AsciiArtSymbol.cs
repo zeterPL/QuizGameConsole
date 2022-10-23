@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -155,7 +156,26 @@ namespace QuizGameConsole
    ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝╚══════╝   
                                                                                                           
 ";
+       // public string userName { get; set; } = "NullValue";
 
+        
+
+        public string getUserNameFrameString(string userName)
+        {
+            return 
+                @$"------------------------------------------------------------------
+                   |                                                                |
+                   |                        {userName}                              |       
+                   |                                                                |
+                   ------------------------------------------------------------------
+                ";
+        }
+
+        /// <summary>
+        /// Zwraca obrazek unktów na podstawie liczby
+        /// </summary>
+        /// <param name="points">Liczba punktów do wyświetlenia</param>
+        /// <returns>Obrazek -> points/10</returns>
         public string getPointsString(int points)
         {
             if (points == 0) return zero;

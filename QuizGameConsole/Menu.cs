@@ -18,6 +18,9 @@ namespace QuizGameConsole
         /// </summary>
         public int selectedOption { get; set; }
 
+        /// <summary>
+        /// Tytuł - logo gry
+        /// </summary>
         public string title { get; set; }
 
         /// <summary>
@@ -31,9 +34,20 @@ namespace QuizGameConsole
         public int? points { get;set; }
 
         /// <summary>
+        /// Liczba punktów
+        /// </summary>
+        public int numberOfOptions { get; set; }
+
+        /// <summary>
+        /// Obecnie grający użytkownik
+        /// </summary>
+        User currentUser { get; set; }
+
+        /// <summary>
         /// Konstruktor
         /// </summary>
         /// <param name="options">Opcje</param>
+        /// <param name="title">Opcjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
         public Menu(string[] options, string title = "", string caption = "")
         {
@@ -41,8 +55,16 @@ namespace QuizGameConsole
             this.caption = caption;
             this.selectedOption = 0;
             this.title = title;
+            this.numberOfOptions = options.Length;
         }
 
+        /// <summary>
+        /// Konstruktor z punktami
+        /// </summary>
+        /// <param name="options">Opcje</param>
+        /// <param name="points">Punkty</param>
+        /// <param name="title">pocjonalny tytuł</param>
+        /// <param name="caption">Opcjonalny opis</param>
         public Menu(string[] options, int points, string title = "", string caption = "")
         {
             this.options = options;
@@ -50,6 +72,18 @@ namespace QuizGameConsole
             this.selectedOption = 0;
             this.title = title;
             this.points = points;
+            this.numberOfOptions = options.Length;
+        }
+
+        public Menu(string[] options,User currentUser, string title = "", string caption = "")
+        {
+            this.options = options;
+            this.caption = caption;
+            this.selectedOption = 0;
+            this.title = title;
+            //this.points = points;
+            this.numberOfOptions = options.Length;
+            this.currentUser = currentUser;
         }
 
         /// <summary>
@@ -62,11 +96,17 @@ namespace QuizGameConsole
 
             //int change = 0;
 
-            //Console.Clear();
+            Console.Clear();
             AsciiArtSymbol asciiSymbol = new AsciiArtSymbol();
             Console.Write(title);
-            (int l, int r) = Console.GetCursorPosition();
-            Console.WriteLine(l + " " + r); //0 8 pozycja do czyszczenia
+            if(currentUser != null)
+            {
+                //string frame = asciiSymbol.getUserNameFrameString("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore);
+                 Console.WriteLine("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
+               // Console.WriteLine(frame);
+            }
+           // (int l, int r) = Console.GetCursorPosition();
+            //Console.WriteLine(l + " " + r); //0 8 pozycja do czyszczenia
 
             if(points != null)
             {
@@ -95,10 +135,10 @@ namespace QuizGameConsole
            // Console.Write(asciiSymbol.zero);
            // Console.Write(string.Concat(asciiSymbol.zero, asciiSymbol.slash, asciiSymbol.ten));
             Console.WriteLine(caption);
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine("");
+            for(int i =0; i<numberOfOptions; i++) Console.WriteLine("");
+            //Console.WriteLine("");
+            //Console.WriteLine("");
+            //Console.WriteLine("");
 
             do
             {
@@ -133,15 +173,16 @@ namespace QuizGameConsole
         public void ConsoleClearOptions()
         {
             (int l, int t) = Console.GetCursorPosition();
-            Console.SetCursorPosition(0, t-1);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, t - 2);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, t - 3);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, t - 4);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, t-4);
+            int index = 0;
+            for(int i = 1; i <= numberOfOptions; i++)
+            {
+                Console.SetCursorPosition(0, t - i);
+                Console.Write(new string(' ', Console.WindowWidth));
+                index = i;
+            }
+
+            
+            Console.SetCursorPosition(0, t-index);
         }
 
         /// <summary>
