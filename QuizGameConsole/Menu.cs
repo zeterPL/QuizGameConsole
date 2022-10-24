@@ -108,9 +108,9 @@ namespace QuizGameConsole
             Console.Write(title);
             if(currentUser != null)
             {
-                //string frame = asciiSymbol.getUserNameFrameString("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore);
-                 Console.WriteLine("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
-               // Console.WriteLine(frame);
+                string frame = asciiSymbol.getUserNameFrameString("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
+                // Console.WriteLine("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
+               Console.WriteLine(frame);
             }
            // (int l, int r) = Console.GetCursorPosition();
             //Console.WriteLine(l + " " + r); //0 8 pozycja do czyszczenia
