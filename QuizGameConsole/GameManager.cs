@@ -250,6 +250,13 @@ namespace QuizGameConsole
             
         }
 
+        /// <summary>
+        /// Wypisuje czas
+        /// </summary>
+        /// <param name="hours">godziny</param>
+        /// <param name="minutes">minuty</param>
+        /// <param name="seconds">sekndy</param>
+        /// <returns></returns>
         private string printTime(int hours, int minutes, int seconds)
         {
             Console.BackgroundColor = ConsoleColor.Yellow;
@@ -376,6 +383,9 @@ namespace QuizGameConsole
 
         }
 
+        /// <summary>
+        /// Zapisuje użytkowników do pliku txt
+        /// </summary>
         public void saveUsers()
         {
             string workingDirectory = Environment.CurrentDirectory;

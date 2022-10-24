@@ -75,6 +75,13 @@ namespace QuizGameConsole
             this.numberOfOptions = options.Length;
         }
 
+        /// <summary>
+        /// Konstruktor z obecnym użytkownikiem
+        /// </summary>
+        /// <param name="options">Opcje</param>
+        /// <param name="currentUser">Obecnie grający user</param>
+        /// <param name="title">Opcjonalny tytuł</param>
+        /// <param name="caption">Opcjonalny opis</param>
         public Menu(string[] options,User currentUser, string title = "", string caption = "")
         {
             this.options = options;
@@ -170,6 +177,9 @@ namespace QuizGameConsole
             return selectedOption;
         }
 
+        /// <summary>
+        /// Czyści opcje w konsoli - zapobiega 'mruganiu'
+        /// </summary>
         public void ConsoleClearOptions()
         {
             (int l, int t) = Console.GetCursorPosition();
