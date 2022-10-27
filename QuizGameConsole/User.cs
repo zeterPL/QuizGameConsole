@@ -27,7 +27,7 @@ namespace QuizGameConsole
         /// Konstruktor
         /// </summary>
         /// <param name="name">Nazwa użytkownika</param>
-        /// <param name="maxScore">Najwyższy wynika użytkownika domyślnie 0</param>
+        /// <param name="maxScore">Najwyższy wynika użytkownika domyślnie 0</param> 
         public User(string name,string bestTime = "" , int maxScore = 0)
         {
             this.Name = name;

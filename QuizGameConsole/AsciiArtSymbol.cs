@@ -170,7 +170,7 @@ namespace QuizGameConsole
             output += "'";
             for (int i = 0; i <= size + 1; i++) output += "-";
             output += "'";
-
+            //
             return output;
 
             /*
