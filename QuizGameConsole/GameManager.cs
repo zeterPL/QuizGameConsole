@@ -61,7 +61,7 @@ namespace QuizGameConsole
         /// <summary>
         /// Uzyskana punty
         /// </summary>
-        public int points { get; set; } = 8;
+        public int points { get; set; };
 
         /// <summary>
         /// Inicjalizuje gre
@@ -76,6 +76,8 @@ namespace QuizGameConsole
 
             //Domyślne klawisze strzałki góra-dół
             controlKeys = new ControlKeys();
+
+            points = 0;
 
             runMainMenu();
         }
@@ -106,9 +108,7 @@ namespace QuizGameConsole
                     exitGame();
                     break;
 
-
-            }
-                  
+            }                 
         }
 
         /// <summary>
@@ -182,8 +182,6 @@ namespace QuizGameConsole
                 {
                     runMainMenu();
                 }
-
-
             }
             else runMainMenu();
 
@@ -444,20 +442,8 @@ namespace QuizGameConsole
         {
             DateTime dateTime = DateTime.Now;
             Console.Clear();
-            /* TEST 
-            string[] options =
-            {
-                "A: Odpowiedź 1",
-                "B: Odpowiedź 2",
-                "C: Odpowiedź 3",
-                "D: Odpowiedź 4",
-            };
-            Menu questionsMenu = new Menu(options, title, "Pytanie 1");
-            questionsMenu.Run();
-            */
             loadQuestions();
             showQuestions(dateTime);
-
         }
 
         /// <summary>
@@ -478,9 +464,7 @@ namespace QuizGameConsole
             else Console.BackgroundColor = ConsoleColor.Red;
             Console.Write($" * << {q.answerOptions[selectedAnswer]} >>");
             Console.ResetColor();
-            Console.SetCursorPosition(l, t);
-
-            
+            Console.SetCursorPosition(l, t);           
         }
 
         /// <summary>
@@ -523,7 +507,6 @@ namespace QuizGameConsole
         /// </summary>
         public void showQuestions(DateTime startTime)
         {
-            //DateTime startTime = DateTime.Now;
             DateTime endTime;
 
             bool[] flags = new bool[questions.Length];
@@ -543,8 +526,7 @@ namespace QuizGameConsole
                     i--;
                     continue;
                 }
-                
-                //Question q = questions[index];
+
                 if(points == 10)
                 {
                     endTime = DateTime.Now;
@@ -588,7 +570,6 @@ namespace QuizGameConsole
                 }
                 Console.WriteLine("Wciśnij dowony przycisk aby kontunuować ...");
                 Console.ReadKey(true);
-                //Console.Clear(); ///
                 clearConsoleLines(0, 8);
             }
 
@@ -604,8 +585,6 @@ namespace QuizGameConsole
             int min = deltaTime.Minutes;
             int h = deltaTime.Hours;
             string bestTime = printTime(h, min, sec);
-            //Console.WriteLine(sec + "sec.");
-            //Console.WriteLine(endTime - startTime);
             if (currentUser != null && currentUser.maxScore < points)
             {
                 currentUser.maxScore = points;

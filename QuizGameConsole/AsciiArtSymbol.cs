@@ -156,10 +156,7 @@ namespace QuizGameConsole
    ╚═╝    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝╚══════╝   
                                                                                                           
 ";
-       // public string userName { get; set; } = "NullValue";
-
-        
-
+             
         public string getUserNameFrameString(string userName)
         {
             string output = "";
@@ -177,12 +174,6 @@ namespace QuizGameConsole
             //
             return output;
 
-            /*
-            return
-                @$".---------------------------------------------.
-                   |                {userName}                   |
-                   '---------------------------------------------'";
-            */
         }
 
         /// <summary>

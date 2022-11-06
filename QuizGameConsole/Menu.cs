@@ -99,7 +99,6 @@ namespace QuizGameConsole
             this.caption = caption;
             this.selectedOption = 0;
             this.title = title;
-            //this.points = points;
             this.numberOfOptions = options.Length;
             this.currentUser = currentUser;
             this.mainColor = consoleColor;
