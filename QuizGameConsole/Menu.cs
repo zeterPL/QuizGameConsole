@@ -48,13 +48,15 @@ namespace QuizGameConsole
         /// </summary>
         ConsoleColor mainColor { get; set; }
 
+        ControlKeys controlKeys { get; set; }
+
         /// <summary>
         /// Konstruktor
         /// </summary>
         /// <param name="options">Opcje</param>
         /// <param name="title">Opcjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
+        public Menu(ControlKeys controlKeys, string[] options, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
@@ -62,6 +64,7 @@ namespace QuizGameConsole
             this.title = title;
             this.numberOfOptions = options.Length;
             this.mainColor = consoleColor;
+            this.controlKeys = controlKeys;
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace QuizGameConsole
         /// <param name="points">Punkty</param>
         /// <param name="title">pocjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options, int points, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
+        public Menu(ControlKeys controlKeys, string[] options, int points, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
@@ -80,6 +83,7 @@ namespace QuizGameConsole
             this.points = points;
             this.numberOfOptions = options.Length;
             this.mainColor = consoleColor;
+            this.controlKeys = controlKeys;
         }
 
         /// <summary>
@@ -89,7 +93,7 @@ namespace QuizGameConsole
         /// <param name="currentUser">Obecnie grający user</param>
         /// <param name="title">Opcjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options,User currentUser, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
+        public Menu(ControlKeys controlKeys, string[] options,User currentUser, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
@@ -99,6 +103,7 @@ namespace QuizGameConsole
             this.numberOfOptions = options.Length;
             this.currentUser = currentUser;
             this.mainColor = consoleColor;
+            this.controlKeys = controlKeys;
         }
 
         /// <summary>
@@ -175,12 +180,12 @@ namespace QuizGameConsole
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 keyPressed = keyInfo.Key;
 
-                if(keyPressed == ConsoleKey.UpArrow)
+                if(keyPressed == controlKeys.getUpKey())
                 {
                     selectedOption--;
                     if (selectedOption == -1) selectedOption = options.Length - 1;
                 }
-                else if(keyPressed == ConsoleKey.DownArrow)
+                else if(keyPressed == controlKeys.getDownKey())
                 {
                     selectedOption++;
                     if (selectedOption == options.Length) selectedOption = 0;

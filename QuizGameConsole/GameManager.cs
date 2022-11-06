@@ -53,6 +53,11 @@ namespace QuizGameConsole
         public ConsoleColor mainColor { get; set; }
 
         /// <summary>
+        /// Klawisze do sterownia w menu
+        /// </summary>
+        public ControlKeys controlKeys { get; set; }
+
+        /// <summary>
         /// Uzyskana punty
         /// </summary>
         public int points { get; set; } = 8;
@@ -68,6 +73,9 @@ namespace QuizGameConsole
             //Domyślny kolor menu
             mainColor = ConsoleColor.White;
 
+            //Domyślne klawisze strzałki góra-dół
+            controlKeys = new ControlKeys(ConsoleKey.UpArrow, ConsoleKey.DownArrow);
+
             runMainMenu();
         }
 
@@ -77,8 +85,8 @@ namespace QuizGameConsole
         private void runMainMenu()
         {
             string[] options = { "Start", "Opcje" ,"Gracz" ,"Wyjście" };
-            if(currentUser == null) this.mainMenu = new Menu(options, title, "Witaj w grze! Wybierz Start aby rozpocząć.", mainColor);
-            else this.mainMenu = new Menu(options, currentUser, title, "Wybierz Start aby rozpocząć.", mainColor);
+            if(currentUser == null) this.mainMenu = new Menu(controlKeys, options, title, "Witaj w grze! Wybierz Start aby rozpocząć.", mainColor);
+            else this.mainMenu = new Menu(controlKeys, options, currentUser, title, "Wybierz Start aby rozpocząć.", mainColor);
 
             int selectedIndex = mainMenu.Run();
 
@@ -114,7 +122,7 @@ namespace QuizGameConsole
                 "Wstecz",
             };
 
-            Menu optionsMenu = new Menu(options, title, "Wybierz opcje z listy poniżej: ", mainColor);
+            Menu optionsMenu = new Menu(controlKeys, options, title, "Wybierz opcje z listy poniżej: ", mainColor);
             int selectedOption = optionsMenu.Run();
 
             switch(selectedOption)
@@ -132,11 +140,25 @@ namespace QuizGameConsole
 
         }
 
-
-        //TODO klasy na kolorystyke i sterowanie, dodać opcionalne parametry do konstruktora menu, uzupełnić funkcje
         public void runControlMenu()
         {
+            Console.Clear();
 
+            Console.ForegroundColor = mainColor;
+            Console.WriteLine(title);
+            Console.ResetColor();
+
+            controlKeys.bindUpKey();
+            Console.WriteLine("Wciśnij dowolny przycik aby kontynuować...");
+            Console.ReadKey(true);
+
+            Console.WriteLine(new String('-', Console.WindowWidth - 10));
+
+            controlKeys.bindDownKey();
+            Console.WriteLine("Wciśnij dowolny przycik aby kontynuować...");
+            Console.ReadKey(true);
+
+            runMainMenu();
         }
 
         public void runColorMenu()
@@ -150,7 +172,7 @@ namespace QuizGameConsole
                 "Żółty",
                 "Wstecz"
             };
-            Menu colorMenu = new Menu(options, title, "Wybierz główny kolor z listy poniżej.", mainColor);
+            Menu colorMenu = new Menu(controlKeys, options, title, "Wybierz główny kolor z listy poniżej.", mainColor);
             int selectedOption = colorMenu.Run();
 
             switch (selectedOption) 
@@ -188,7 +210,7 @@ namespace QuizGameConsole
         public void runUserMenu()
         {
             string[] options = { "Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
-            Menu userMenu = new Menu(options, title, "Wybierz opcje: ", mainColor);
+            Menu userMenu = new Menu(controlKeys, options, title, "Wybierz opcje: ", mainColor);
             Console.Clear();
             int selectedOption = userMenu.Run();
 
@@ -226,8 +248,12 @@ namespace QuizGameConsole
 
         public void showUsers(string[] usersNames)
         {
-            Menu usersMenu = new Menu(usersNames, title, "Wybierz użytkownika z listy", mainColor);
+            Menu usersMenu = new Menu(controlKeys, usersNames, title, "Wybierz użytkownika z listy", mainColor);
             int selectedItem = usersMenu.Run();
+
+            //ostatni element tablicy nazw to 'wstecz'
+            if (selectedItem == usersNames.Length - 1)
+                runUserMenu();
 
             this.currentUser = users[selectedItem];
 
@@ -249,7 +275,7 @@ namespace QuizGameConsole
                 if(!isNew) users = new User[numberOfUsers];
                 else users = new User[numberOfUsers + 1];
 
-                usersNames = new string[numberOfUsers];
+                usersNames = new string[numberOfUsers+1];
 
                 int index = 0;
                 int indexNames = 0;
@@ -263,6 +289,7 @@ namespace QuizGameConsole
                     User u = new User(name ,bestTime ,maxScore);
                     users[index++] = u;
                 }
+                usersNames[indexNames] = "Wstecz";
             }
             return usersNames;
         }
@@ -336,13 +363,13 @@ namespace QuizGameConsole
             {
                 if (minutes == 0)
                 {
-                    Console.WriteLine(seconds + " sec.");
+                    Console.WriteLine("Twój czas to: " + seconds + " sec.");
                     Console.ResetColor();
                     return seconds + " sec.";
                 }
                 else
                 {
-                    Console.WriteLine(minutes + " min. " + seconds + " sec.");
+                    Console.WriteLine("Twój czas to: " + minutes + " min. " + seconds + " sec.");
                     Console.ResetColor();
                     return minutes + " min. " + seconds + " sec.";
                 }
@@ -350,7 +377,7 @@ namespace QuizGameConsole
             }
             else 
             {
-                Console.WriteLine(hours + " hour " + minutes + " min." + seconds + " sec.");
+                Console.WriteLine("Twój czas to: " + hours + " hour " + minutes + " min." + seconds + " sec.");
                 Console.ResetColor();
                 return hours + " hour " + minutes + " min." + seconds + " sec.";
             }
@@ -410,7 +437,7 @@ namespace QuizGameConsole
                     
                 }
 
-                Menu questionMenu = new Menu(q.answerOptions ,points, title, q.content, mainColor);
+                Menu questionMenu = new Menu(controlKeys, q.answerOptions ,points, title, q.content, mainColor);
 
                 int selectedAnswer = questionMenu.Run();
                 if(selectedAnswer == q.correctAnswer)
