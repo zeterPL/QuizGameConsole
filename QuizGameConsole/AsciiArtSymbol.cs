@@ -162,11 +162,15 @@ namespace QuizGameConsole
 
         public string getUserNameFrameString(string userName)
         {
-            string output = ".";
+            string output = "";
+            output += "     ";
+            output += ".";
             int size = userName.Length;
             for (int i = 0; i <= size+1; i++) output += "-";
             output += ".\n";
+            output += "     ";
             output += "| " + userName + " |\n";
+            output += "     ";
             output += "'";
             for (int i = 0; i <= size + 1; i++) output += "-";
             output += "'";

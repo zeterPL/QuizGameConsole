@@ -110,11 +110,9 @@ namespace QuizGameConsole
         /// Włącza menu
         /// </summary>
         /// <returns>Zwraca indeks wybranej opcji</returns>
-        public int Run()
+        public int Run(bool isUserMenu = false)
         {
             ConsoleKey keyPressed;
-
-            //int change = 0;
 
             Console.Clear();
             AsciiArtSymbol asciiSymbol = new AsciiArtSymbol();
@@ -126,11 +124,8 @@ namespace QuizGameConsole
             if(currentUser != null)
             {
                 string frame = asciiSymbol.getUserNameFrameString("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
-                // Console.WriteLine("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
                Console.WriteLine(frame);
             }
-           // (int l, int r) = Console.GetCursorPosition();
-            //Console.WriteLine(l + " " + r); //0 8 pozycja do czyszczenia
 
             if(points != null)
             {
@@ -139,43 +134,17 @@ namespace QuizGameConsole
                 Console.ForegroundColor = mainColor;
                 Console.WriteLine(p);
                 Console.ResetColor();
-                /*
-                if(points == 0 ) Console.WriteLine(asciiSymbol.zero);
-                if (points == 1 ) Console.WriteLine(asciiSymbol.one);
-                if (points == 2 ) Console.WriteLine(asciiSymbol.two);
-                if (points == 3 ) Console.WriteLine(asciiSymbol.three);
-                if (points == 4 ) Console.WriteLine(asciiSymbol.four);
-                if (points == 5 ) Console.WriteLine(asciiSymbol.five);
-                if (points == 6 ) Console.WriteLine(asciiSymbol.six);
-                if (points == 7 ) Console.WriteLine(asciiSymbol.seven);
-                if (points == 8 ) Console.WriteLine(asciiSymbol.eight);
-                if (points == 9 ) Console.WriteLine(asciiSymbol.nine);
-                if (points == 10 ) Console.WriteLine(asciiSymbol.ten);
-                */
             }
-            //Console.WriteLine(asciiSymbol.zero);
-            //(int l, int r) = Console.GetCursorPosition();
-            //Console.WriteLine("l: " + l +" r: " + r);
-           // Console.SetCursorPosition(80, 0);
-           // Console.Write(@"TEST");
-           // Console.SetCursorPosition(l, r);
-           // Console.Write(asciiSymbol.zero);
-           // Console.Write(string.Concat(asciiSymbol.zero, asciiSymbol.slash, asciiSymbol.ten));
+
             Console.WriteLine(caption);
             for(int i =0; i<numberOfOptions; i++) Console.WriteLine("");
-            //Console.WriteLine("");
-            //Console.WriteLine("");
-            //Console.WriteLine("");
 
             do
             {
-               // Console.Clear();
-               // Console.WriteLine(title);
-                //Console.WriteLine(caption);
-                
-
                 ConsoleClearOptions();
-                showScreen();
+
+                if (isUserMenu) showScreen(true);
+                else showScreen();
 
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 keyPressed = keyInfo.Key;
@@ -218,28 +187,100 @@ namespace QuizGameConsole
         /// <summary>
         /// Wyświetla opcje i im nadaje odpowiednie kolory 
         /// </summary>
-        public void showScreen()
+        public void showScreen(bool isUserMenu = false)
         {
-            for(int i = 0; i < options.Length; i++)
+            if(isUserMenu)
             {
-                string currentOption = options[i];
-                string prefix = " ";
+                for (int i = 0; i < options.Length; i++)
+                {
+                    string currentOption = options[i];
+                    string prefix = " ";
 
-                if(i == selectedOption)
-                {
-                    prefix = "*";
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.White;
+                    if(i == 0)
+                    {
+                        if(mainColor == ConsoleColor.Yellow || mainColor == ConsoleColor.White)
+                        {
+                            if (i == selectedOption)
+                            {
+                                prefix = "*";
+                                if(mainColor == ConsoleColor.Yellow) Console.ForegroundColor = mainColor;
+                                else Console.ForegroundColor = ConsoleColor.Black;
+                                if(mainColor == ConsoleColor.Yellow) Console.BackgroundColor = ConsoleColor.DarkGray;
+                                else Console.BackgroundColor = ConsoleColor.White;
+                            }
+                            else
+                            {
+                                prefix = " ";
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.BackgroundColor = mainColor;
+                            }
+                            Console.WriteLine($" {prefix} << {currentOption} >>");
+                        }
+                        else
+                        {
+                            if (i == selectedOption)
+                            {
+                                prefix = "*";
+                                Console.ForegroundColor = currentUser.userColor;
+                                Console.BackgroundColor = ConsoleColor.White;
+                            }
+                            else
+                            {
+                                prefix = " ";
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.BackgroundColor = currentUser.userColor;
+                            }
+                            Console.WriteLine($" {prefix} << {currentOption} >>");
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (i == selectedOption)
+                        {
+                            prefix = "*";
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.BackgroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                            prefix = " ";
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.BackgroundColor = ConsoleColor.Black;
+                        }
+                        Console.WriteLine($" {prefix} << {currentOption} >>");
+                    }
+
+                    
                 }
-                else
-                {
-                    prefix = " ";
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Black;
-                }
-                Console.WriteLine($" {prefix} << {currentOption} >>");
+                Console.ResetColor();
             }
-            Console.ResetColor();
+            else
+            {
+                for (int i = 0; i < options.Length; i++)
+                {
+                    string currentOption = options[i];
+                    string prefix = " ";                                    
+                    
+                    if (i == selectedOption)
+                    {
+                        prefix = "*";
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                    else
+                    {
+                        prefix = " ";
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    Console.WriteLine($" {prefix} << {currentOption} >>");                 
+
+                }
+                Console.ResetColor();
+            }
+
+            
         }
     }
 }

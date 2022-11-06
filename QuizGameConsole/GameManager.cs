@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
@@ -74,7 +75,7 @@ namespace QuizGameConsole
             mainColor = ConsoleColor.White;
 
             //Domyślne klawisze strzałki góra-dół
-            controlKeys = new ControlKeys(ConsoleKey.UpArrow, ConsoleKey.DownArrow);
+            controlKeys = new ControlKeys();
 
             runMainMenu();
         }
@@ -158,7 +159,34 @@ namespace QuizGameConsole
             Console.WriteLine("Wciśnij dowolny przycik aby kontynuować...");
             Console.ReadKey(true);
 
-            runMainMenu();
+            if(currentUser != null)
+            {
+
+                Console.Clear();
+                Console.ForegroundColor = mainColor;
+                Console.WriteLine(title);
+                Console.ResetColor();
+
+                string[] options2 = { "Tak", "Nie" };
+
+                Menu menu = new Menu(controlKeys, options2, title, "Czy chcesz zapisać swoje ustawienia sterowania?", mainColor);
+                int selectedItem = menu.Run();
+
+                if (selectedItem == 0)
+                {
+                    currentUser.userKeys = controlKeys;
+                    saveUsers();
+                    runMainMenu();
+                }
+                else if (selectedItem == 1)
+                {
+                    runMainMenu();
+                }
+
+
+            }
+            else runMainMenu();
+
         }
 
         public void runColorMenu()
@@ -179,29 +207,53 @@ namespace QuizGameConsole
             {
                 case 0:
                     mainColor = ConsoleColor.Red;
-                    runMainMenu();
+                    
                     break;
                 case 1:
                     mainColor = ConsoleColor.White;
-                    runMainMenu();
+                    
                     break;
                 case 2:
                     mainColor = ConsoleColor.Green;
-                    runMainMenu();
+                    
                     break;
                 case 3:
                     mainColor = ConsoleColor.Blue;
-                    runMainMenu();
+                   
                     break;
                 case 4:
                     mainColor = ConsoleColor.Yellow;
-                    runMainMenu();
+                    
                     break;
                 case 5:
                     runMainMenu();
                     break;
             }
+            Console.Clear();    
 
+            if(currentUser != null)
+            {
+                Console.ForegroundColor = mainColor;
+                Console.WriteLine(title);
+                Console.ResetColor();
+
+                string[] options2 = { "Tak", "Nie" };
+
+                Menu menu = new Menu(controlKeys, options2, title, "Czy chcesz zapisać swoje ustawienia koloru?", mainColor);
+                int selectedItem = menu.Run();
+
+                if(selectedItem == 0)
+                {
+                    currentUser.userColor = mainColor;
+                    saveUsers();
+                    runMainMenu();
+                }
+                else if(selectedItem == 1)
+                {
+                    runMainMenu();
+                }
+
+            } else runMainMenu();
         }
 
         /// <summary>
@@ -209,24 +261,71 @@ namespace QuizGameConsole
         /// </summary>
         public void runUserMenu()
         {
-            string[] options = { "Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
-            Menu userMenu = new Menu(controlKeys, options, title, "Wybierz opcje: ", mainColor);
-            Console.Clear();
-            int selectedOption = userMenu.Run();
+            Menu userMenu;
+            if(currentUser != null)
+            {
+                string[] options = {currentUser.Name ,"Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
+                userMenu = new Menu(controlKeys, options, currentUser, title, "Wybierz opcje: ", mainColor);
+                int selectedOption = userMenu.Run(true);
 
-            if(selectedOption == 0)
-            {
-                string[] usersNames = loadUsers();
-                showUsers(usersNames);
+                switch(selectedOption)
+                {
+                    case 0:
+                        showCurrentUserPanel();
+                        break;
+                    case 1:
+                        string[] usersNames = loadUsers();
+                        showUsers(usersNames);
+                        break;
+                    case 2:
+                        addUser();
+                        break;
+                    case 3:
+                        runMainMenu();
+                        break;
+                }
             }
-            else if(selectedOption == 1)
+            else
             {
-                addUser();
+                string[] options = { "Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
+                userMenu = new Menu(controlKeys, options, title, "Wybierz opcje: ", mainColor);
+                int selectedOption = userMenu.Run();
+
+                switch (selectedOption)
+                {                  
+                    case 0:
+                        string[] usersNames = loadUsers();
+                        showUsers(usersNames);
+                        break;
+                    case 1:
+                        addUser();
+                        break;
+                    case 2:
+                        runMainMenu();
+                        break;
+                }
             }
-            else if(selectedOption == 2)
-            {
-                runMainMenu();
-            }
+                      
+        }
+
+        public void showCurrentUserPanel()
+        {
+            string caption = 
+            @$"
+               Nazwa użytkownika - {currentUser.Name}
+               Najlepszy wynik - {currentUser.maxScore}/10 punktów w czasie {currentUser.bestTime}
+               Kolor główny - {currentUser.userColor.ToString()}
+               Ustawienia sterowania:
+                     Górny przycisk - {currentUser.userKeys.getUpKey().ToString()}
+                     Dolny przycisk - {currentUser.userKeys.getDownKey().ToString()}
+            ";
+
+            string[] options = { "Wstecz" };
+
+            Menu menu = new Menu(controlKeys, options, currentUser, title, caption, mainColor);
+            int selectedOption = menu.Run();
+
+            if (selectedOption == 0) runUserMenu();
 
         }
 
@@ -256,6 +355,8 @@ namespace QuizGameConsole
                 runUserMenu();
 
             this.currentUser = users[selectedItem];
+            mainColor = currentUser.userColor;
+            controlKeys = currentUser.userKeys;
 
             runMainMenu();
 
@@ -284,15 +385,49 @@ namespace QuizGameConsole
                     string name = usersFile.ReadLine();
                     int maxScore = int.Parse(usersFile.ReadLine());
                     string bestTime = usersFile.ReadLine();
+                    ConsoleColor userColor = getColorFromString(usersFile.ReadLine());
+                    ConsoleKey upKey = getKeyFromString(usersFile.ReadLine());
+                    ConsoleKey downKey = getKeyFromString(usersFile.ReadLine());
 
                     usersNames[indexNames++] = name;
+
+                    ControlKeys controlKeys = new ControlKeys(upKey, downKey);
+
                     User u = new User(name ,bestTime ,maxScore);
+                    u.userKeys = controlKeys;
+                    u.userColor = userColor;
+
                     users[index++] = u;
                 }
                 usersNames[indexNames] = "Wstecz";
             }
             return usersNames;
         }
+
+        public ConsoleKey getKeyFromString(string keyName)
+        {
+            ConsoleKey key;
+            key = (ConsoleKey)Enum.Parse(typeof(ConsoleKey), keyName, true);
+            return key;
+        }
+
+        public ConsoleColor getColorFromString(string colorName)
+        {
+            ConsoleColor color;
+
+            try
+            {
+                color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), colorName, true);
+                return color;
+            }
+            catch(Exception ex)
+            {
+                //zły kolor
+                return ConsoleColor.White;
+            }
+
+        }
+
         /// <summary>
         /// Wychodzi z gry
         /// </summary>
@@ -492,14 +627,17 @@ namespace QuizGameConsole
         {
             string workingDirectory = Environment.CurrentDirectory;
             string[] lines;
-            lines = new string[users.Length * 3 + 1];
+            lines = new string[users.Length * 6 + 1];
             lines[0] = users.Length.ToString();
             int index = 0;
-            for(int i=1; i < lines.Length; i+=3)
+            for(int i=1; i < lines.Length; i+=6)
             {
                 lines[i] = users[index].Name;
-                lines[i+1] = users[index].maxScore.ToString();
-                lines[i+2] = users[index].bestTime.ToString();
+                lines[i + 1] = users[index].maxScore.ToString();
+                lines[i + 2] = users[index].bestTime.ToString();
+                lines[i + 3] = users[index].userColor.ToString();
+                lines[i + 4] = users[index].userKeys.getUpKey().ToString();
+                lines[i + 5] = users[index].userKeys.getDownKey().ToString();
                 index++;
             }
             File.WriteAllLines(Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\users.txt", lines);

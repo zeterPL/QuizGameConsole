@@ -8,18 +8,41 @@ namespace QuizGameConsole
 {
     public class ControlKeys
     {
+        /// <summary>
+        /// Przycisk górny
+        /// </summary>
         private ConsoleKey UpKey;
 
+        /// <summary>
+        /// Przycisk dolny
+        /// </summary>
         private ConsoleKey DownKey;
 
-        public ControlKeys() { }
+        /// <summary>
+        /// Domyślny konstruktor
+        /// </summary>
+        public ControlKeys() 
+        {
+            UpKey = ConsoleKey.UpArrow;
+            DownKey = ConsoleKey.DownArrow;
+        }
 
+        /// <summary>
+        /// Konstruktor
+        /// </summary>
+        /// <param name="upKey">górny przycisk</param>
+        /// <param name="downKey">dolny przycisk</param>
         public ControlKeys(ConsoleKey upKey, ConsoleKey downKey)
         {
             UpKey = upKey;
             DownKey = downKey;
         }
 
+        /// <summary>
+        /// Sprawdza czy można przypisać dany klawisz
+        /// </summary>
+        /// <param name="key">Klawisz do sprawdzenia</param>
+        /// <returns>Czy można przypisać klawisz</returns>
         private bool isKeyCorrect(ConsoleKey key)
         {
             if (key == ConsoleKey.Enter || key == ConsoleKey.Escape)
@@ -29,6 +52,9 @@ namespace QuizGameConsole
             else return true;
         }
 
+        /// <summary>
+        /// Przypisanie górnego przycisku
+        /// </summary>
         public void bindUpKey()
         {
             ConsoleKey key;
@@ -62,6 +88,9 @@ namespace QuizGameConsole
 
         }
 
+        /// <summary>
+        /// Przypisanie dolnego przycisku
+        /// </summary>
         public void bindDownKey()
         {
             ConsoleKey key;
@@ -93,6 +122,7 @@ namespace QuizGameConsole
             Console.WriteLine("Przypisano przycisk - " + key.ToString());
             Console.ResetColor();
         }
+
 
         public ConsoleKey getUpKey()
         {

@@ -1,13 +1,43 @@
-4
+7
 TestUser
 10
 4 sec.
+Red
+UpArrow
+DownArrow
 SuperUser
 10
 31 sec.
+White
+UpArrow
+DownArrow
 mama
 8
 1 min. 8 sec.
+White
+UpArrow
+DownArrow
 Marsel
-1
-4 sec.
+10
+3 sec.
+Green
+U
+D
+nowy
+0
+
+White
+UpArrow
+DownArrow
+Bogusia
+10
+3 sec.
+Red
+T
+D
+Pies1337
+8
+5 sec.
+Yellow
+UpArrow
+DownArrow

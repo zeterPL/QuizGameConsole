@@ -24,6 +24,16 @@ namespace QuizGameConsole
         public string bestTime { get; set; }
 
         /// <summary>
+        /// Kolor wybrany przez użytkownika
+        /// </summary>
+        public ConsoleColor userColor { get; set; }
+
+        /// <summary>
+        /// Klawisze wybrane przez użytkownika
+        /// </summary>
+        public ControlKeys userKeys { get; set; }
+
+        /// <summary>
         /// Konstruktor
         /// </summary>
         /// <param name="name">Nazwa użytkownika</param>
@@ -33,6 +43,10 @@ namespace QuizGameConsole
             this.Name = name;
             this.maxScore = maxScore;
             this.bestTime = bestTime;
+
+            //domyślne
+            userColor = ConsoleColor.White;
+            userKeys = new ControlKeys();
         }
     }
 }
