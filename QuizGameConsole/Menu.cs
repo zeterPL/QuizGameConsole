@@ -44,18 +44,24 @@ namespace QuizGameConsole
         User currentUser { get; set; }
 
         /// <summary>
+        /// Główny kolor menu
+        /// </summary>
+        ConsoleColor mainColor { get; set; }
+
+        /// <summary>
         /// Konstruktor
         /// </summary>
         /// <param name="options">Opcje</param>
         /// <param name="title">Opcjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options, string title = "", string caption = "")
+        public Menu(string[] options, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
             this.selectedOption = 0;
             this.title = title;
             this.numberOfOptions = options.Length;
+            this.mainColor = consoleColor;
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace QuizGameConsole
         /// <param name="points">Punkty</param>
         /// <param name="title">pocjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options, int points, string title = "", string caption = "")
+        public Menu(string[] options, int points, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
@@ -73,6 +79,7 @@ namespace QuizGameConsole
             this.title = title;
             this.points = points;
             this.numberOfOptions = options.Length;
+            this.mainColor = consoleColor;
         }
 
         /// <summary>
@@ -82,7 +89,7 @@ namespace QuizGameConsole
         /// <param name="currentUser">Obecnie grający user</param>
         /// <param name="title">Opcjonalny tytuł</param>
         /// <param name="caption">Opcjonalny opis</param>
-        public Menu(string[] options,User currentUser, string title = "", string caption = "")
+        public Menu(string[] options,User currentUser, string title = "", string caption = "", ConsoleColor consoleColor = ConsoleColor.White)
         {
             this.options = options;
             this.caption = caption;
@@ -91,6 +98,7 @@ namespace QuizGameConsole
             //this.points = points;
             this.numberOfOptions = options.Length;
             this.currentUser = currentUser;
+            this.mainColor = consoleColor;
         }
 
         /// <summary>
@@ -105,7 +113,11 @@ namespace QuizGameConsole
 
             Console.Clear();
             AsciiArtSymbol asciiSymbol = new AsciiArtSymbol();
+
+            Console.ForegroundColor = mainColor;
             Console.Write(title);
+            Console.ResetColor();
+
             if(currentUser != null)
             {
                 string frame = asciiSymbol.getUserNameFrameString("Witaj " + currentUser.Name + "! " + "Twój najlepszy wynik to: " + currentUser.maxScore + " Czas: " + currentUser.bestTime);
@@ -118,7 +130,10 @@ namespace QuizGameConsole
             if(points != null)
             {
                 string p = asciiSymbol.getPointsString((int)points);
+
+                Console.ForegroundColor = mainColor;
                 Console.WriteLine(p);
+                Console.ResetColor();
                 /*
                 if(points == 0 ) Console.WriteLine(asciiSymbol.zero);
                 if (points == 1 ) Console.WriteLine(asciiSymbol.one);

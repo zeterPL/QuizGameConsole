@@ -48,6 +48,11 @@ namespace QuizGameConsole
         public User currentUser { get; set; }
 
         /// <summary>
+        /// Główny kolor menu
+        /// </summary>
+        public ConsoleColor mainColor { get; set; }
+
+        /// <summary>
         /// Uzyskana punty
         /// </summary>
         public int points { get; set; } = 8;
@@ -57,8 +62,12 @@ namespace QuizGameConsole
         /// </summary>
         public void startGame()
         {
+            //Niewidoczy kursor
             Console.CursorVisible = false;
-            //Console.WriteLine(title);
+
+            //Domyślny kolor menu
+            mainColor = ConsoleColor.White;
+
             runMainMenu();
         }
 
@@ -68,8 +77,8 @@ namespace QuizGameConsole
         private void runMainMenu()
         {
             string[] options = { "Start", "Opcje" ,"Gracz" ,"Wyjście" };
-            if(currentUser == null) this.mainMenu = new Menu(options, title, "Witaj w grze! Wybierz Start aby rozpocząć.");
-            else this.mainMenu = new Menu(options, currentUser, title, "Wybierz Start aby rozpocząć.");
+            if(currentUser == null) this.mainMenu = new Menu(options, title, "Witaj w grze! Wybierz Start aby rozpocząć.", mainColor);
+            else this.mainMenu = new Menu(options, currentUser, title, "Wybierz Start aby rozpocząć.", mainColor);
 
             int selectedIndex = mainMenu.Run();
 
@@ -102,12 +111,74 @@ namespace QuizGameConsole
             {
                 "Kolory",
                 "Sterowanie",
-                "Muzyka",
                 "Wstecz",
             };
 
-            Menu optionsMenu = new Menu(options, title, "Wybierz opcje z listy poniżej: ");
+            Menu optionsMenu = new Menu(options, title, "Wybierz opcje z listy poniżej: ", mainColor);
             int selectedOption = optionsMenu.Run();
+
+            switch(selectedOption)
+            {
+                case 0:
+                    runColorMenu();
+                    break;
+                case 1:
+                    runControlMenu();
+                    break;
+                case 2:
+                    runMainMenu();
+                    break;
+            }
+
+        }
+
+
+        //TODO klasy na kolorystyke i sterowanie, dodać opcionalne parametry do konstruktora menu, uzupełnić funkcje
+        public void runControlMenu()
+        {
+
+        }
+
+        public void runColorMenu()
+        {
+            string[] options =
+            {
+                "Czerwony",
+                "Biały",
+                "Zielony",
+                "Niebieski",
+                "Żółty",
+                "Wstecz"
+            };
+            Menu colorMenu = new Menu(options, title, "Wybierz główny kolor z listy poniżej.", mainColor);
+            int selectedOption = colorMenu.Run();
+
+            switch (selectedOption) 
+            {
+                case 0:
+                    mainColor = ConsoleColor.Red;
+                    runMainMenu();
+                    break;
+                case 1:
+                    mainColor = ConsoleColor.White;
+                    runMainMenu();
+                    break;
+                case 2:
+                    mainColor = ConsoleColor.Green;
+                    runMainMenu();
+                    break;
+                case 3:
+                    mainColor = ConsoleColor.Blue;
+                    runMainMenu();
+                    break;
+                case 4:
+                    mainColor = ConsoleColor.Yellow;
+                    runMainMenu();
+                    break;
+                case 5:
+                    runMainMenu();
+                    break;
+            }
 
         }
 
@@ -117,7 +188,7 @@ namespace QuizGameConsole
         public void runUserMenu()
         {
             string[] options = { "Wczytaj użytkownika", "Stwórz użytkownika", "Wstecz" };
-            Menu userMenu = new Menu(options, title, "Wybierz opcje: ");
+            Menu userMenu = new Menu(options, title, "Wybierz opcje: ", mainColor);
             Console.Clear();
             int selectedOption = userMenu.Run();
 
@@ -155,7 +226,7 @@ namespace QuizGameConsole
 
         public void showUsers(string[] usersNames)
         {
-            Menu usersMenu = new Menu(usersNames, title, "Wybierz użytkownika z listy");
+            Menu usersMenu = new Menu(usersNames, title, "Wybierz użytkownika z listy", mainColor);
             int selectedItem = usersMenu.Run();
 
             this.currentUser = users[selectedItem];
@@ -316,7 +387,9 @@ namespace QuizGameConsole
                 {
                     endTime = DateTime.Now;
                     Console.Clear();
+                    Console.ForegroundColor = mainColor;
                     Console.WriteLine(asciiSymbol.win);
+                    Console.ResetColor();
                     TimeSpan dt = endTime - startTime;
                     int seconds = dt.Seconds;
                     int minutes = dt.Minutes;
@@ -337,7 +410,7 @@ namespace QuizGameConsole
                     
                 }
 
-                Menu questionMenu = new Menu(q.answerOptions ,points, title, q.content);
+                Menu questionMenu = new Menu(q.answerOptions ,points, title, q.content, mainColor);
 
                 int selectedAnswer = questionMenu.Run();
                 if(selectedAnswer == q.correctAnswer)
@@ -359,9 +432,11 @@ namespace QuizGameConsole
 
             endTime = DateTime.Now;
             Console.Clear();
+            Console.ForegroundColor = mainColor;
             Console.WriteLine(asciiSymbol.score);
             string p = asciiSymbol.getPointsString(points);
             Console.WriteLine(p);
+            Console.ResetColor();
             TimeSpan deltaTime = endTime - startTime;
             int sec = deltaTime.Seconds;
             int min = deltaTime.Minutes;
